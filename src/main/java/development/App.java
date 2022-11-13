@@ -27,7 +27,7 @@ public class App implements EventListener {
                 .build();
 
         for (SlashCommand slashCommand : ConfigurationUtility.configuration.getSlashCommands()) {
-            jda.upsertCommand(slashCommand.getName(), slashCommand.getDescription());
+            jda.upsertCommand(slashCommand.getName(), slashCommand.getDescription()).queue();;
         }
     }
 
