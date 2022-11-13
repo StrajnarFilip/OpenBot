@@ -7,6 +7,7 @@ import javax.security.auth.login.LoginException;
 
 import development.configuration.ConfigurationUtility;
 import development.configuration.SlashCommand;
+import development.listeners.SelfAssignRolesListener;
 import development.listeners.SimpleListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -23,6 +24,7 @@ public class App implements EventListener {
                 .enableIntents(allIntents)
                 .addEventListeners(new App())
                 .addEventListeners(new SimpleListener())
+                .addEventListeners(new SelfAssignRolesListener())
                 .setActivity(Activity.playing("in the woods"))
                 .build();
 
