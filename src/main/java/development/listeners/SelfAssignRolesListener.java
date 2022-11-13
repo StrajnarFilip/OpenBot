@@ -1,6 +1,9 @@
 package development.listeners;
 
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import development.configuration.ConfigurationUtility;
 import development.configuration.ReactionRole;
@@ -9,9 +12,11 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
+import net.dv8tion.jda.api.events.message.react.GenericMessageReactionEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
@@ -41,6 +46,36 @@ public class SelfAssignRolesListener extends ListenerAdapter {
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent event) {
+        onReactionChange(event, new ReactionChangeActions() {
+            @Override
+            public void onRoleMatch(Guild guild, User user, Role role) {
+                guild.addRoleToMember(user, role).queue();
+
+            }
+
+            @Override
+            public void onRoleNotMatching(Guild guild, User user, Role role) {
+                guild.removeRoleFromMember(user, role).queue();
+            }
+        });
+    }
+
+    @Override
+    public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
+        onReactionChange(event, new ReactionChangeActions() {
+            @Override
+            public void onRoleMatch(Guild guild, User user, Role role) {
+                guild.removeRoleFromMember(user, role).queue();
+            }
+
+            @Override
+            public void onRoleNotMatching(Guild guild, User user, Role role) {
+                // Do nothing
+            }
+        });
+    }
+
+    static void onReactionChange(GenericMessageReactionEvent event, ReactionChangeActions actions) {
         SelfRoleAssignment[] selfRoleAssignments = ConfigurationUtility.configuration.getSelfRoleAssignments();
         for (SelfRoleAssignment selfRoleAssignment : selfRoleAssignments) {
             // Check if reaction is on this message
@@ -50,29 +85,9 @@ public class SelfAssignRolesListener extends ListenerAdapter {
                     List<Role> matchingRoles = guild.getRolesByName(reactionRole.getRole(), false);
                     Role matchingRole = matchingRoles.get(0);
                     if (compareReactionRoleAndEventEmoji(reactionRole, event.getEmoji())) {
-                        guild.addRoleToMember(event.getUser(), matchingRole).queue();
-                    } else {
-                        if (selfRoleAssignment.getSelectOne()) {
-                            guild.removeRoleFromMember(event.getUser(), matchingRole).queue();
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onMessageReactionRemove(MessageReactionRemoveEvent event) {
-        SelfRoleAssignment[] selfRoleAssignments = ConfigurationUtility.configuration.getSelfRoleAssignments();
-        for (SelfRoleAssignment selfRoleAssignment : selfRoleAssignments) {
-            // Check if reaction is on this message
-            if (getMessageId(selfRoleAssignment).equals(event.getMessageId())) {
-                for (ReactionRole reactionRole : selfRoleAssignment.getReactionRoles()) {
-                    Guild guild = event.getGuild();
-                    if (compareReactionRoleAndEventEmoji(reactionRole, event.getEmoji())) {
-                        List<Role> matchingRoles = guild.getRolesByName(reactionRole.getRole(), false);
-                        Role matchingRole = matchingRoles.get(0);
-                        guild.removeRoleFromMember(event.getUser(), matchingRole).queue();
+                        actions.onRoleMatch(guild, event.getUser(), matchingRole);
+                    } else if (selfRoleAssignment.getSelectOne()) {
+                        actions.onRoleNotMatching(guild, event.getUser(), matchingRole);
                     }
                 }
             }
