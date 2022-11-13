@@ -8,12 +8,10 @@ import development.configuration.SelfRoleAssignment;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageHistory;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.entities.emoji.EmojiUnion;
-import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.message.react.MessageReactionAddEvent;
 import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
@@ -33,7 +31,6 @@ public class SelfAssignRolesListener extends ListenerAdapter {
 
             TextChannel channel = jda.getTextChannelById(channelId);
             Message roleAssignmentMessage = channel.retrieveMessageById(messageId).complete();
-            Guild guild = channel.getGuild();
 
             for (ReactionRole reactionRole : selfRoleAssignment.getReactionRoles()) {
                 EmojiUnion emoji = Emoji.fromFormatted(reactionRole.getReaction());
@@ -50,10 +47,14 @@ public class SelfAssignRolesListener extends ListenerAdapter {
             if (getMessageId(selfRoleAssignment).equals(event.getMessageId())) {
                 for (ReactionRole reactionRole : selfRoleAssignment.getReactionRoles()) {
                     Guild guild = event.getGuild();
+                    List<Role> matchingRoles = guild.getRolesByName(reactionRole.getRole(), false);
+                    Role matchingRole = matchingRoles.get(0);
                     if (compareReactionRoleAndEventEmoji(reactionRole, event.getEmoji())) {
-                        List<Role> matchingRoles = guild.getRolesByName(reactionRole.getRole(), false);
-                        Role matchingRole = matchingRoles.get(0);
                         guild.addRoleToMember(event.getUser(), matchingRole).queue();
+                    } else {
+                        if (selfRoleAssignment.getSelectOne()) {
+                            guild.removeRoleFromMember(event.getUser(), matchingRole).queue();
+                        }
                     }
                 }
             }
