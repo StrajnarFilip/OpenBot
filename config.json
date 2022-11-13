@@ -1,0 +1,17 @@
+{
+    "bot-token": "YOUR-TOKEN",
+    "simple-responses": [
+        {
+            "command": "!ping",
+            "response": "pong"
+        }
+    ],
+    "slash-commands": [
+        {
+            "name": "ping",
+            "description": "Returns pong.",
+            "response": "pong",
+            "ephemeral": true
+        }
+    ]
+}
