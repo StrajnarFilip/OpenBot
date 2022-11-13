@@ -12,6 +12,9 @@ public class JsonConfiguration {
     @SerializedName("slash-commands")
     SlashCommand[] slashCommands;
 
+    @SerializedName("self-role-assignment")
+    SelfRoleAssignment[] selfRoleAssignments;
+
     public String getBotToken() {
         return botToken;
     }
@@ -22,5 +25,9 @@ public class JsonConfiguration {
 
     public SlashCommand[] getSlashCommands() {
         return slashCommands;
+    }
+
+    public SelfRoleAssignment[] getSelfRoleAssignments() {
+        return selfRoleAssignments;
     }
 }

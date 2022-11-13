@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 public class SimpleResponse {
     @SerializedName("command")
     String command;
+
     @SerializedName("response")
     String response;
 

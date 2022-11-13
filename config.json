@@ -13,5 +13,6 @@
             "response": "pong",
             "ephemeral": true
         }
-    ]
+    ],
+    "self-role-assignment":[]
 }
