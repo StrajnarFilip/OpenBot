@@ -2,9 +2,7 @@ package development;
 
 import java.util.Arrays;
 import java.util.List;
-
 import javax.security.auth.login.LoginException;
-
 import development.configuration.ConfigurationUtility;
 import development.configuration.SlashCommand;
 import development.listeners.SelfAssignRolesListener;
