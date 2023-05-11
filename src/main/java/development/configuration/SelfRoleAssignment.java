@@ -7,7 +7,7 @@ public class SelfRoleAssignment {
     String messageLink;
 
     @JsonProperty("select-one")
-    Boolean selectOne;
+    boolean selectOne;
 
     @JsonProperty("reaction-roles")
     ReactionRole[] reactionRoles;
@@ -16,7 +16,7 @@ public class SelfRoleAssignment {
         return messageLink;
     }
 
-    public Boolean getSelectOne() {
+    public boolean getSelectOne() {
         return selectOne;
     }
 
