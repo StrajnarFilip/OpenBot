@@ -1,12 +1,14 @@
 package development.configuration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConfigurationUtility {
+    private ConfigurationUtility() {
+        throw new IllegalStateException("Utility class");
+    }
+
     static ObjectMapper objectMapper = new ObjectMapper();
 
     public static String configurationFilePath() {
@@ -21,12 +23,10 @@ public class ConfigurationUtility {
     public static JsonConfiguration getJsonConfiguration() {
         try {
             return objectMapper.readValue(new File(configurationFilePath()), JsonConfiguration.class);
-        } catch (FileNotFoundException ex) {
-            return null;
         } catch (Exception ex) {
             return null;
         }
     }
 
-    public static JsonConfiguration configuration = getJsonConfiguration();
+    public static final JsonConfiguration configuration = getJsonConfiguration();
 }

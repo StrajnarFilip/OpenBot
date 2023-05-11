@@ -2,7 +2,8 @@ package development;
 
 import java.util.Arrays;
 import java.util.List;
-import javax.security.auth.login.LoginException;
+import java.util.logging.Logger;
+
 import development.configuration.ConfigurationUtility;
 import development.configuration.SlashCommand;
 import development.listeners.SelfAssignRolesListener;
@@ -16,8 +17,11 @@ import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class App implements EventListener {
-    public static void main(String[] args) throws LoginException {
-        System.out.println(ConfigurationUtility.configurationFilePath());
+    private static final Logger LOGGER = Logger.getLogger("Discord bot");
+    private static final String CONFIGURATION_PATH = ConfigurationUtility.configurationFilePath();
+
+    public static void main(String[] args) {
+        LOGGER.info("Configuration file path: " + CONFIGURATION_PATH);
         JDA jda = JDABuilder.createDefault(ConfigurationUtility.configuration.getBotToken())
                 .enableIntents(allIntents)
                 .addEventListeners(new App())
@@ -27,17 +31,17 @@ public class App implements EventListener {
                 .build();
 
         for (SlashCommand slashCommand : ConfigurationUtility.configuration.getSlashCommands()) {
-            jda.upsertCommand(slashCommand.getName(), slashCommand.getDescription()).queue();;
+            jda.upsertCommand(slashCommand.getName(), slashCommand.getDescription()).queue();
         }
     }
 
     @Override
     public void onEvent(GenericEvent event) {
         if (event instanceof ReadyEvent)
-            System.out.println("API is ready!");
+            LOGGER.info("API is ready!");
     }
 
-    static List<GatewayIntent> allIntents = Arrays.asList(new GatewayIntent[] {
+    static List<GatewayIntent> allIntents = Arrays.asList(
             GatewayIntent.DIRECT_MESSAGES,
             GatewayIntent.DIRECT_MESSAGE_REACTIONS,
             GatewayIntent.DIRECT_MESSAGE_TYPING,
@@ -52,6 +56,5 @@ public class App implements EventListener {
             GatewayIntent.GUILD_VOICE_STATES,
             GatewayIntent.GUILD_WEBHOOKS,
             GatewayIntent.MESSAGE_CONTENT,
-            GatewayIntent.SCHEDULED_EVENTS
-    });
+            GatewayIntent.SCHEDULED_EVENTS);
 }
