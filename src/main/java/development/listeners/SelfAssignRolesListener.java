@@ -91,7 +91,8 @@ public class SelfAssignRolesListener extends ListenerAdapter {
     }
 
     static boolean compareReactionRoleAndEventEmoji(ReactionRole reactionRole, EmojiUnion emojiUnion) {
-        return emojiUnion.asUnicode().getAsCodepoints().equalsIgnoreCase(reactionRole.getReaction());
+        return emojiUnion.asUnicode().getAsCodepoints().equalsIgnoreCase(reactionRole.getReaction())
+                || emojiUnion.asUnicode().getAsReactionCode().equalsIgnoreCase(reactionRole.getReaction());
     }
 
     static String[] messageLinkSegments(SelfRoleAssignment selfRoleAssignment) {

@@ -1,18 +1,18 @@
 package development.configuration;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JsonConfiguration {
-    @SerializedName("bot-token")
+    @JsonProperty("bot-token")
     String botToken;
 
-    @SerializedName("simple-responses")
+    @JsonProperty("simple-responses")
     SimpleResponse[] simpleResponses;
 
-    @SerializedName("slash-commands")
+    @JsonProperty("slash-commands")
     SlashCommand[] slashCommands;
 
-    @SerializedName("self-role-assignment")
+    @JsonProperty("self-role-assignment")
     SelfRoleAssignment[] selfRoleAssignments;
 
     public String getBotToken() {

@@ -14,5 +14,20 @@
             "ephemeral": true
         }
     ],
-    "self-role-assignment":[]
+    "self-role-assignment":[
+        {
+            "message-link": "https://discord.com/channels/111111111111111111/111111111111111111/111111111111111111",
+            "select-one": false,
+            "reaction-roles": [
+                {
+                    "reaction": "U+1F405",
+                    "role": "Tiger"
+                },
+                {
+                    "reaction": "🦁",
+                    "role": "Lion"
+                }
+            ]
+        }
+    ]
 }

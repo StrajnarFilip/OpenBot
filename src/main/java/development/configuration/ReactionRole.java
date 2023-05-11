@@ -1,12 +1,12 @@
 package development.configuration;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ReactionRole {
-    @SerializedName("reaction")
+    @JsonProperty("reaction")
     String reaction;
 
-    @SerializedName("role")
+    @JsonProperty("role")
     String role;
 
     public String getReaction() {

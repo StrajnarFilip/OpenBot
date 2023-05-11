@@ -1,15 +1,15 @@
 package development.configuration;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SelfRoleAssignment {
-    @SerializedName("message-link")
+    @JsonProperty("message-link")
     String messageLink;
 
-    @SerializedName("select-one")
+    @JsonProperty("select-one")
     Boolean selectOne;
 
-    @SerializedName("reaction-roles")
+    @JsonProperty("reaction-roles")
     ReactionRole[] reactionRoles;
 
     public String getMessageLink() {

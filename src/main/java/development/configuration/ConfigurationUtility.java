@@ -1,12 +1,13 @@
 package development.configuration;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ConfigurationUtility {
-    static Gson gson = new Gson();
+    static ObjectMapper objectMapper = new ObjectMapper();
 
     public static String configurationFilePath() {
         // Save environmental variable "ConfigurationFilePath"
@@ -19,9 +20,10 @@ public class ConfigurationUtility {
 
     public static JsonConfiguration getJsonConfiguration() {
         try {
-            FileReader configurationFile = new FileReader(configurationFilePath());
-            return gson.fromJson(configurationFile, JsonConfiguration.class);
+            return objectMapper.readValue(new File(configurationFilePath()), JsonConfiguration.class);
         } catch (FileNotFoundException ex) {
+            return null;
+        } catch (Exception ex) {
             return null;
         }
     }

@@ -1,18 +1,18 @@
 package development.configuration;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SlashCommand {
-    @SerializedName("name")
+    @JsonProperty("name")
     String name;
 
-    @SerializedName("description")
+    @JsonProperty("description")
     String description;
 
-    @SerializedName("response")
+    @JsonProperty("response")
     String response;
 
-    @SerializedName("ephemeral")
+    @JsonProperty("ephemeral")
     Boolean ephemeral;
 
     public String getName() {

@@ -1,12 +1,12 @@
 package development.configuration;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SimpleResponse {
-    @SerializedName("command")
+    @JsonProperty("command")
     String command;
 
-    @SerializedName("response")
+    @JsonProperty("response")
     String response;
 
     public String getCommand() {
