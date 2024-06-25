@@ -1,33 +1,40 @@
 {
-    "bot-token": "YOUR-TOKEN",
-    "simple-responses": [
+  "bot-token": "YOUR-TOKEN",
+  "simple-responses": [
+    {
+      "command": "!ping",
+      "response": "pong"
+    }
+  ],
+  "slash-commands": [
+    {
+      "name": "ping",
+      "description": "Returns pong.",
+      "response": "pong",
+      "ephemeral": true
+    }
+  ],
+  "self-role-assignment": [
+    {
+      "message-link": "https://discord.com/channels/111111111111111111/111111111111111111/111111111111111111",
+      "select-one": false,
+      "reaction-roles": [
         {
-            "command": "!ping",
-            "response": "pong"
-        }
-    ],
-    "slash-commands": [
+          "reaction": "U+1F405",
+          "role": "Tiger"
+        },
         {
-            "name": "ping",
-            "description": "Returns pong.",
-            "response": "pong",
-            "ephemeral": true
+          "reaction": "🦁",
+          "role": "Lion"
         }
-    ],
-    "self-role-assignment":[
-        {
-            "message-link": "https://discord.com/channels/111111111111111111/111111111111111111/111111111111111111",
-            "select-one": false,
-            "reaction-roles": [
-                {
-                    "reaction": "U+1F405",
-                    "role": "Tiger"
-                },
-                {
-                    "reaction": "🦁",
-                    "role": "Lion"
-                }
-            ]
-        }
-    ]
+      ]
+    }
+  ],
+  "bot-is-watching": "Pogačar",
+  "contains-replies": [
+    {
+      "contains": "upgrade",
+      "response": "Ride up grades, don't buy upgrades."
+    }
+  ]
 }
