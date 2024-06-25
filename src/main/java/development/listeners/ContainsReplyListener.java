@@ -8,16 +8,16 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class ContainsReplyListener extends ListenerAdapter {
     @Override
-    public void onMessageReceived(MessageReceivedEvent event){
+    public void onMessageReceived(MessageReceivedEvent event) {
         JsonConfiguration configuration = ConfigurationUtility.getJsonConfiguration();
 
-        for(ContainsReply containsReply : configuration.getContainsReplies()){
+        for (ContainsReply containsReply : configuration.getContainsReplies()) {
             String checkFor = containsReply.getContains().toLowerCase();
             String content = event.getMessage().getContentRaw().toLowerCase();
 
             boolean containsString = content.contains(checkFor);
 
-            if(containsString){
+            if (containsString) {
                 event.getMessage().reply(containsReply.getResponse()).queue();
             }
         }

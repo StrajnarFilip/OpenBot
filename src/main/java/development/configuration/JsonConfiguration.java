@@ -21,7 +21,9 @@ public class JsonConfiguration {
     @JsonProperty("bot-is-watching")
     String watching;
 
-    public String getWatching() {return watching;}
+    public String getWatching() {
+        return watching;
+    }
 
     public String getBotToken() {
         return botToken;
@@ -39,5 +41,7 @@ public class JsonConfiguration {
         return selfRoleAssignments;
     }
 
-    public ContainsReply[] getContainsReplies() {return containsReplies;}
+    public ContainsReply[] getContainsReplies() {
+        return containsReplies;
+    }
 }

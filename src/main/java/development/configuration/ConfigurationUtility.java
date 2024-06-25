@@ -1,15 +1,16 @@
 package development.configuration;
 
-import java.io.File;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.File;
+
 public class ConfigurationUtility {
+    static ObjectMapper objectMapper = new ObjectMapper();
+    public static final JsonConfiguration configuration = getJsonConfiguration();
+
     private ConfigurationUtility() {
         throw new IllegalStateException("Utility class");
     }
-
-    static ObjectMapper objectMapper = new ObjectMapper();
 
     public static String configurationFilePath() {
         // Save environmental variable "ConfigurationFilePath"
@@ -27,6 +28,4 @@ public class ConfigurationUtility {
             return null;
         }
     }
-
-    public static final JsonConfiguration configuration = getJsonConfiguration();
 }

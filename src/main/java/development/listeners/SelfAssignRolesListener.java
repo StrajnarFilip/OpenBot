@@ -1,6 +1,5 @@
 package development.listeners;
 
-import java.util.List;
 import development.configuration.ConfigurationUtility;
 import development.configuration.ReactionRole;
 import development.configuration.SelfRoleAssignment;
@@ -18,7 +17,52 @@ import net.dv8tion.jda.api.events.message.react.MessageReactionRemoveEvent;
 import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
+import java.util.List;
+
 public class SelfAssignRolesListener extends ListenerAdapter {
+    static void onReactionChange(GenericMessageReactionEvent event, ReactionChangeActions actions) {
+        SelfRoleAssignment[] selfRoleAssignments = ConfigurationUtility.configuration.getSelfRoleAssignments();
+        for (SelfRoleAssignment selfRoleAssignment : selfRoleAssignments) {
+            // Check if reaction is on this message
+            if (getMessageId(selfRoleAssignment).equals(event.getMessageId())) {
+                for (ReactionRole reactionRole : selfRoleAssignment.getReactionRoles()) {
+                    Guild guild = event.getGuild();
+                    List<Role> matchingRoles = guild.getRolesByName(reactionRole.getRole(), false);
+                    Role matchingRole = matchingRoles.get(0);
+                    if (compareReactionRoleAndEventEmoji(reactionRole, event.getEmoji())) {
+                        actions.onRoleMatch(guild, event.getUser(), matchingRole);
+                    } else if (selfRoleAssignment.getSelectOne()) {
+                        actions.onRoleNotMatching(guild, event.getUser(), matchingRole);
+                    }
+                }
+            }
+        }
+    }
+
+    static boolean compareReactionRoleAndEventEmoji(ReactionRole reactionRole, EmojiUnion emojiUnion) {
+        return emojiUnion.asUnicode().getAsCodepoints().equalsIgnoreCase(reactionRole.getReaction())
+                || emojiUnion.asUnicode().getAsReactionCode().equalsIgnoreCase(reactionRole.getReaction());
+    }
+
+    static String[] messageLinkSegments(SelfRoleAssignment selfRoleAssignment) {
+        return selfRoleAssignment.getMessageLink().split("/");
+    }
+
+    static String getMessageId(SelfRoleAssignment selfRoleAssignment) {
+        String[] segments = messageLinkSegments(selfRoleAssignment);
+        return segments[segments.length - 1];
+    }
+
+    static String getChannelId(SelfRoleAssignment selfRoleAssignment) {
+        String[] segments = messageLinkSegments(selfRoleAssignment);
+        return segments[segments.length - 2];
+    }
+
+    static String getGuildId(SelfRoleAssignment selfRoleAssignment) {
+        String[] segments = messageLinkSegments(selfRoleAssignment);
+        return segments[segments.length - 3];
+    }
+
     @Override
     public void onReady(ReadyEvent event) {
         JDA jda = event.getJDA();
@@ -69,48 +113,5 @@ public class SelfAssignRolesListener extends ListenerAdapter {
                 // Do nothing
             }
         });
-    }
-
-    static void onReactionChange(GenericMessageReactionEvent event, ReactionChangeActions actions) {
-        SelfRoleAssignment[] selfRoleAssignments = ConfigurationUtility.configuration.getSelfRoleAssignments();
-        for (SelfRoleAssignment selfRoleAssignment : selfRoleAssignments) {
-            // Check if reaction is on this message
-            if (getMessageId(selfRoleAssignment).equals(event.getMessageId())) {
-                for (ReactionRole reactionRole : selfRoleAssignment.getReactionRoles()) {
-                    Guild guild = event.getGuild();
-                    List<Role> matchingRoles = guild.getRolesByName(reactionRole.getRole(), false);
-                    Role matchingRole = matchingRoles.get(0);
-                    if (compareReactionRoleAndEventEmoji(reactionRole, event.getEmoji())) {
-                        actions.onRoleMatch(guild, event.getUser(), matchingRole);
-                    } else if (selfRoleAssignment.getSelectOne()) {
-                        actions.onRoleNotMatching(guild, event.getUser(), matchingRole);
-                    }
-                }
-            }
-        }
-    }
-
-    static boolean compareReactionRoleAndEventEmoji(ReactionRole reactionRole, EmojiUnion emojiUnion) {
-        return emojiUnion.asUnicode().getAsCodepoints().equalsIgnoreCase(reactionRole.getReaction())
-                || emojiUnion.asUnicode().getAsReactionCode().equalsIgnoreCase(reactionRole.getReaction());
-    }
-
-    static String[] messageLinkSegments(SelfRoleAssignment selfRoleAssignment) {
-        return selfRoleAssignment.getMessageLink().split("/");
-    }
-
-    static String getMessageId(SelfRoleAssignment selfRoleAssignment) {
-        String[] segments = messageLinkSegments(selfRoleAssignment);
-        return segments[segments.length - 1];
-    }
-
-    static String getChannelId(SelfRoleAssignment selfRoleAssignment) {
-        String[] segments = messageLinkSegments(selfRoleAssignment);
-        return segments[segments.length - 2];
-    }
-
-    static String getGuildId(SelfRoleAssignment selfRoleAssignment) {
-        String[] segments = messageLinkSegments(selfRoleAssignment);
-        return segments[segments.length - 3];
     }
 }
