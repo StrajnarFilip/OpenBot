@@ -18,6 +18,11 @@ public class JsonConfiguration {
     @JsonProperty("contains-replies")
     ContainsReply[] containsReplies;
 
+    @JsonProperty("bot-is-watching")
+    String watching;
+
+    public String getWatching() {return watching;}
+
     public String getBotToken() {
         return botToken;
     }

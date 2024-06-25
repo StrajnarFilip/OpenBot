@@ -29,7 +29,7 @@ public class App implements EventListener {
                 .addEventListeners(new SimpleListener())
                 .addEventListeners(new SelfAssignRolesListener())
                 .addEventListeners(new ContainsReplyListener())
-                .setActivity(Activity.watching("birds"))
+                .setActivity(Activity.watching(ConfigurationUtility.configuration.getWatching()))
                 .build();
 
         for (SlashCommand slashCommand : ConfigurationUtility.configuration.getSlashCommands()) {
