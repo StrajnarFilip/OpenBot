@@ -9,6 +9,11 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class ContainsReplyListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        if(event.getAuthor().isBot())
+        {
+            return;
+        }
+
         JsonConfiguration configuration = ConfigurationUtility.getJsonConfiguration();
 
         for (ContainsReply containsReply : configuration.getContainsReplies()) {
