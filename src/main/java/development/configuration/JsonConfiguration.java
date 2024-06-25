@@ -15,6 +15,9 @@ public class JsonConfiguration {
     @JsonProperty("self-role-assignment")
     SelfRoleAssignment[] selfRoleAssignments;
 
+    @JsonProperty("contains-replies")
+    ContainsReply[] containsReplies;
+
     public String getBotToken() {
         return botToken;
     }
@@ -30,4 +33,6 @@ public class JsonConfiguration {
     public SelfRoleAssignment[] getSelfRoleAssignments() {
         return selfRoleAssignments;
     }
+
+    public ContainsReply[] getContainsReplies() {return containsReplies;}
 }
