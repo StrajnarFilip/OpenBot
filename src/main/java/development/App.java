@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 
 import development.configuration.ConfigurationUtility;
 import development.configuration.SlashCommand;
+import development.listeners.ContainsReplyListener;
 import development.listeners.SelfAssignRolesListener;
 import development.listeners.SimpleListener;
 import net.dv8tion.jda.api.JDA;
@@ -27,6 +28,7 @@ public class App implements EventListener {
                 .addEventListeners(new App())
                 .addEventListeners(new SimpleListener())
                 .addEventListeners(new SelfAssignRolesListener())
+                .addEventListeners(new ContainsReplyListener())
                 .setActivity(Activity.watching("birds"))
                 .build();
 
